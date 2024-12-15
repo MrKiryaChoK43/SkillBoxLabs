@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список автомобилей</title>
+</head>
+<body>
+    <script>
+        // Объект с автомобилями
+        const cars = {
+            "Toyota Camry": {
+                name: "Toyota Camry",
+                wheels: 4,
+                doors: 4,
+                isStarted: false,
+                hp: 200,
+            },
+            "Honda Accord": {
+                name: "Honda Accord",
+                wheels: 4,
+                doors: 4,
+                isStarted: true,
+                hp: 250,
+            },
+            "Ford Mustang": {
+                name: "Ford Mustang",
+                wheels: 4,
+                doors: 2,
+                isStarted: true,
+                hp: 450,
+            },
+            "Chevrolet Malibu": {
+                name: "Chevrolet Malibu",
+                wheels: 4,
+                doors: 4,
+                isStarted: false,
+                hp: 150,
+            }
+        };
+
+        // Функция для вывода названий всех автомобилей
+        const printCarNames = () => {
+            for (const car in cars) {
+                if (cars.hasOwnProperty(car)) {
+                    console.log(car); // Выводим название автомобиля
+                }
+            }
+        };
+
+        // Вызов функции для вывода имен автомобилей
+        printCarNames();
+    </script>
+</body>
+</html>

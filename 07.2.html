@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рост учеников</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        li {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+        }
+        
+        button {
+            margin-right: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .filter-height{
+            background-color: orange
+        }
+        
+        .filter-height:hover{
+            background-color: rgb(255, 192, 74)
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Рост учеников</h1>
+    
+    <button class="add-height">Добавить рост</button>
+    <button class="filter-height">Фильтровать</button>
+    
+    <ul class="height-list"></ul>
+
+    <script>
+        // Исходный массив с ростом учеников (в сантиметрах)
+let heights = [160, 175, 150, 180, 165];
+
+// Получаем элементы из DOM
+const heightList = document.querySelector('.height-list');
+const addHeightButton = document.querySelector('.add-height');
+const filterHeightButton = document.querySelector('.filter-height');
+
+// Функция для отображения роста в списке
+function displayHeights(filteredHeights) {
+    heightList.innerHTML = ''; // Очищаем список
+    (filteredHeights || heights).forEach(height => {
+        const listItem = document.createElement('li');
+        listItem.textContent = height + ' см';
+        heightList.appendChild(listItem);
+    });
+}
+
+// Функция для добавления роста
+function addHeight() {
+    const heightInput = prompt("Введите рост ученика (в см):");
+    
+    if (heightInput) {
+        const height = parseInt(heightInput);
+        
+        if (!isNaN(height) && height > 0) {
+            heights.push(height); // Добавляем рост в массив
+            displayHeights(); // Обновляем отображение
+        } else {
+            alert("Введите корректное значение роста!");
+        }
+    } else {
+        alert("Рост не введён!");
+    }
+}
+
+// Функция для фильтрации роста
+function filterHeight() {
+    const minHeightInput = prompt("Введите минимальный рост для фильтрации (в см):");
+    
+    if (minHeightInput) {
+        const minHeight = parseInt(minHeightInput);
+
+        if (!isNaN(minHeight) && minHeight >= 0) {
+            const filteredHeights = heights.filter(height => height >= minHeight);
+            displayHeights(filteredHeights); // Обновляем отображение с учетом фильтрации
+        } else {
+            alert("Введите корректное значение для фильтрации!");
+        }
+    } else {
+        displayHeights(); // Показываем весь список, если ничего не введено
+    }
+}
+
+// Подключаем обработчики событий
+addHeightButton.addEventListener('click', addHeight);
+filterHeightButton.addEventListener('click', filterHeight);
+
+// Изначально отображаем высоты
+displayHeights();
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина покупателя</title>
+    <style>body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    
+    h1 {
+        color: #333;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    li {
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-bottom: 5px;
+    }
+    
+    button {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+    <h1>Корзина покупателя</h1>
+    
+    <button class="add-product">Добавить товар</button>
+    <ul class="product-list"></ul>
+    <script>
+        // Исходный массив с товарами
+let products = ["Яблоко", "Апельсин", "Груша", "Вишня"];
+
+// Получаем элементы из DOM
+const productList = document.querySelector('.product-list');
+const addProductButton = document.querySelector('.add-product');
+
+// Функция для отображения товаров в списке
+function displayProducts() {
+    productList.innerHTML = ''; // Очищаем список
+    // Сортируем массив продуктов и отображаем их
+    products.sort().forEach(product => {
+        const listItem = document.createElement('li');
+        listItem.textContent = product;
+        productList.appendChild(listItem);
+    });
+}
+
+// Функция для добавления товара
+function addProduct() {
+    const productName = prompt("Введите название товара:");
+    
+    if (productName) {
+        products.push(productName); // Добавляем товар в массив
+        displayProducts(); // Обновляем отображение
+    } else {
+        alert("Название товара не введено!");
+    }
+}
+
+// Подключаем обработчик событий
+addProductButton.addEventListener('click', addProduct);
+
+// Изначально отображаем товары
+displayProducts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мини-галерея</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+            background-color: black;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: url("https://img.goodfon.ru/original/1920x1080/9/63/zvezdnye-voyny-star-wars-2383.jpg") no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+        .thumbnails {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .thumbnail {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .thumbnail:hover {
+            border-color: #007BFF;
+        }
+        .full-size {
+            width: 550px;
+            height: 310px;
+            border: 2px solid #ffffff;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .full-size img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Мини-галерея</h1>
+    <div class="thumbnails">
+        <img src="https://img1.akspic.ru/previews/1/4/9/2/7/172941/172941-zvezdnye_vojny-shturmovik-enakin_skajuoker-klon_soldat-verhnyaya_odezhda-550x310.jpg" class="thumbnail" alt="Image 1">
+        <img src="https://img2.akspic.ru/previews/5/4/2/5/6/165245/165245-zvezdnye_vojny-dart_vejder-han_solo-tysyacheletnij_sokol-korabelnaya_arhitektura-550x310.jpg" class="thumbnail" alt="Image 2">
+        <img src="https://img1.akspic.ru/previews/6/9/6/4/6/164696/164696-zvezdnye_vojny-bb_8-dart_vejder-poe_demeron-poster-550x310.jpg" class="thumbnail" alt="Image 3">
+        <img src="https://img2.akspic.ru/previews/4/6/7/0/4/140764/140764-zvezdnye_vojny-krasnyj_cvet-vymyslennyj_personaz-verhnyaya_odezhda-zvezdnye_vojny_battlefront-550x310.jpg" class="thumbnail" alt="Image 4">
+        <img src="https://img2.akspic.ru/previews/4/3/6/7/5/157634/157634-zvezdnye_vojny_poslednij_dzhedaj-korol-dejzi_ridli-bb_8-zvezdnye_vojny-550x310.jpg" class="thumbnail" alt="Image 5">
+    </div>
+    <div class="full-size">
+        <img src="https://img.goodfon.ru/wallpaper/big/2/68/badfon-star-wars-zvezdnye-voyny-179.webp" style="width: 100%; height: 100%;" id="fullImage" alt="Full image will appear here">
+    </div>
+
+    <script>
+        // Получаем все миниатюры
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        // Получаем элемент для отображения полноразмерного изображения
+        const fullImage = document.getElementById('fullImage');
+
+        // Добавляем обработчик события клика для каждой миниатюры
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                // Получаем URL миниатюры
+                const imageUrl = this.src;
+                // Устанавливаем URL миниатюры как источник для полноразмерного изображения
+                fullImage.src = imageUrl;
+            });
+        });
+    </script>
+</body>
+</html>

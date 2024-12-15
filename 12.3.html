@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Промокод</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .promo-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .promo-form .input-group {
+            display: flex;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .promo-form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .promo-form button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .promo-form button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 10px;
+            color: green;
+            text-align: center;
+        }
+        .applied-promocodes {
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 100%; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="promo-form" id="promoForm">
+    <div class="input-group">
+        <input type="text" id="promoInput" placeholder="Промокод">
+        <button id="submitBtn">Применить</button>
+    </div>
+    <div class="message" id="promoMessage"></div>
+    <div class="applied-promocodes" id="appliedCodes"></div> <!-- Добавлен блок для списка активированных промокодов -->
+</div>
+
+<script>
+    const promocodeArr = [
+        {
+            promocode: 'PROM10',
+            gift: "Скидка 10%"
+        },
+        {
+            promocode: 'PROM50',
+            gift: "Скидка 50%"
+        },
+        {
+            promocode: 'GIFT',
+            gift: "Подарок в корзине"
+        }
+    ];
+
+    // Получить куки
+    function getCookie() {
+        return document.cookie.split('; ').reduce((acc, item) => {
+            const [name, value] = item.split('=');
+            acc[name] = decodeURIComponent(value);
+            return acc;
+        }, {});
+    }
+
+    // Проверка сохраненного промокода из cookie при загрузке страницы
+    const cookie = getCookie();
+    if (cookie.promocode) {
+        const appliedCodes = document.getElementById('appliedCodes');
+        appliedCodes.innerHTML += `<div>${cookie.promocode} - ${getGiftByPromocode(cookie.promocode)}</div>`;
+    }
+
+    // Функция для получения подарка по промокоду
+    function getGiftByPromocode(promocode) {
+        const promo = promocodeArr.find(p => p.promocode === promocode);
+        return promo ? promo.gift : null;
+    }
+
+    // Обработка успешной активации (добавление промокода в список)
+    function displaySuccess(promocode) {
+        const gift = getGiftByPromocode(promocode);
+        const appliedCodes = document.getElementById('appliedCodes');
+        if (gift) {
+            document.getElementById('promoMessage').innerText = `Промокод активирован: ${gift}`;
+            document.getElementById('promoMessage').style.color = 'green';
+        }
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', function (event) {
+        event.preventDefault();
+        const promoInput = document.getElementById('promoInput').value;
+        const promo = promocodeArr.find(p => p.promocode === promoInput);
+
+        if (promo) {
+            document.cookie = `promocode=${encodeURIComponent(promoInput)}; path=/;`; // Сохраняем код
+            displaySuccess(promoInput);
+            document.getElementById('promoInput').value = ''; // Очищаем поле ввода после успешного ввода
+        } else {
+            document.getElementById('promoMessage').innerText = "Неверный промокод. Попробуйте еще раз.";
+            document.getElementById('promoMessage').style.color = 'red';
+        }
+    });
+</script>
+
+</body>
+</html>

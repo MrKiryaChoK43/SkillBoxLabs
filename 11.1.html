@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма опроса</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Опрос о пользователе</h1>
+    
+    <form id="surveyForm">
+        <label for="name">Имя пользователя:</label>
+        <input type="text" id="name" required>
+        <span class="error" id="nameError"></span><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <span class="error" id="emailError"></span><br><br>
+
+        <label>Пол:</label><br>
+        <input type="radio" id="male" name="gender" value="Мужской" required>
+        <label for="male">Мужской</label><br>
+        <input type="radio" id="female" name="gender" value="Женский" required>
+        <label for="female">Женский</label><br><br>
+
+        <label for="rating">Оценка сервиса (от 1 до 10):</label>
+        <input type="range" id="rating" name="rating" min="1" max="10" value="5"><br><br>
+
+        <label>Интересы:</label><br>
+        <input type="checkbox" id="sport" value="Спорт">
+        <label for="sport">Спорт</label><br>
+        <input type="checkbox" id="music" value="Музыка">
+        <label for="music">Музыка</label><br>
+        <input type="checkbox" id="travel" value="Путешествия">
+        <label for="travel">Путешествия</label><br>
+        <input type="checkbox" id="movies" value="Кино">
+        <label for="movies">Кино</label><br><br>
+
+        <label for="comments">Дополнительные комментарии:</label><br>
+        <textarea id="comments" rows="4" cols="50"></textarea><br><br>
+
+        <button type="submit">Отправить</button>
+    </form>
+
+    <div id="results">
+        <h2>Результаты опроса:</h2>
+        <p id="userData"></p>
+    </div>
+
+    <script>
+        const surveyForm = document.getElementById('surveyForm');
+        const resultsDiv = document.getElementById('results');
+        const userData = document.getElementById('userData');
+
+        surveyForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем отправку формы
+
+            // Сбрасываем сообщения об ошибках
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+
+            // Получаем значения из формы
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const rating = document.getElementById('rating').value;
+            const interests = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.value);
+            const comments = document.getElementById('comments').value.trim();
+
+            // Валидация
+            let valid = true;
+
+            if (name === '') {
+                document.getElementById('nameError').textContent = 'Имя обязательно для заполнения.';
+                valid = false;
+            }
+
+            if (email === '') {
+                document.getElementById('emailError').textContent = 'Email обязателен для заполнения.';
+                valid = false;
+            } else {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(email)) {
+                    document.getElementById('emailError').textContent = 'Введите действительный адрес электронной почты.';
+                    valid = false;
+                }
+            }
+
+            if (!gender) {
+                alert('Выберите пол.');
+                valid = false;
+            }
+
+            // Если валидация успешна, выводим результаты
+            if (valid) {
+                userData.innerHTML = `
+                    <strong>Имя:</strong> ${name}<br>
+                    <strong>Email:</strong> ${email}<br>
+                    <strong>Пол:</strong> ${gender.value}<br>
+                    <strong>Оценка сервиса:</strong> ${rating}<br>
+                    <strong>Интересы:</strong> ${interests.length > 0 ? interests.join(', ') : 'Нет выбранных интересов.'}<br>
+                    <strong>Комментарии:</strong> ${comments || 'Нет комментариев.'}
+                `;
+                resultsDiv.style.display = 'block'; // Показываем результаты
+            }
+        });
+    </script>
+</body>
+</html>

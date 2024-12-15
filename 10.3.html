@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сортировка цен</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none; /* Убираем маркеры списка */
+            padding: 0;
+        }
+        li {
+            margin: 5px 0; /* Отступ между элементами списка */
+        }
+        button {
+            margin: 5px; /* Отступы для кнопок */
+            padding: 10px 15px; /* Внутренние отступы */
+            cursor: pointer; /* Курсор в виде указателя */
+        }
+    </style>
+</head>
+<body>
+    <ul id="priceList">
+        <!-- Цены будут добавляться сюда -->
+    </ul>
+
+    <button id="sortAscButton">Сортировать по возрастанию</button>
+    <button id="sortDescButton">Сортировать по убыванию</button>
+
+    <script>
+        // Исходный массив с ценами
+        const prices = [100, 500, 250, 750, 300];
+
+        const priceList = document.getElementById('priceList');
+        const sortAscButton = document.getElementById('sortAscButton');
+        const sortDescButton = document.getElementById('sortDescButton');
+
+        // Функция для отображения цен на странице
+        function displayPrices() {
+            // Очищаем текущий список
+            priceList.innerHTML = '';
+            // Добавляем каждый элемент массива как новый <li>
+            prices.forEach(price => {
+                const listItem = document.createElement('li');
+                listItem.textContent = price + ' ₽'; // Добавляем символ рубля
+                priceList.appendChild(listItem);
+            });
+        }
+
+        // Функция для сортировки по возрастанию
+        function sortPricesAsc() {
+            prices.sort((a, b) => a - b); // Сортируем массив по возрастанию
+            displayPrices(); // Обновляем отображение
+        }
+
+        // Функция для сортировки по убыванию
+        function sortPricesDesc() {
+            prices.sort((a, b) => b - a); // Сортируем массив по убыванию
+            displayPrices(); // Обновляем отображение
+        }
+
+        // Обработчики событий для кнопок
+        sortAscButton.addEventListener('click', sortPricesAsc);
+        sortDescButton.addEventListener('click', sortPricesDesc);
+
+        // Изначальное отображение цен
+        displayPrices();
+    </script>
+</body>
+</html>

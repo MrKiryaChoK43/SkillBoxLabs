@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькуляция стоимости доставки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Калькуляция стоимости доставки товаров</h1>
+
+    <form id="productForm">
+        <label for="productName">Название товара:</label>
+        <input type="text" id="productName" required>
+        <span class="error" id="nameError"></span><br><br>
+
+        <label for="productWeight">Вес товара (кг):</label>
+        <input type="number" id="productWeight" min="0" step="0.1" required>
+        <span class="error" id="weightError"></span><br><br>
+
+        <label for="deliveryDistance">Расстояние доставки (км):</label>
+        <input type="number" id="deliveryDistance" min="0" step="0.1" required>
+        <span class="error" id="distanceError"></span><br><br>
+
+        <button type="submit">Добавить товар</button>
+    </form>
+
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>Название товара</th>
+                <th>Вес (кг)</th>
+                <th>Расстояние (км)</th>
+                <th>Стоимость доставки</th>
+            </tr>
+        </thead>
+        <tbody id="productList">
+            <!-- Здесь будут добавляться товары -->
+        </tbody>
+    </table>
+
+    <script>
+        const productForm = document.getElementById('productForm');
+        const productList = document.getElementById('productList');
+
+        productForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем отправку формы
+
+            // Сбрасываем сообщения об ошибках
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('weightError').textContent = '';
+            document.getElementById('distanceError').textContent = '';
+
+            // Получаем значения из формы
+            const productName = document.getElementById('productName').value.trim();
+            const productWeight = parseFloat(document.getElementById('productWeight').value);
+            const deliveryDistance = parseFloat(document.getElementById('deliveryDistance').value);
+
+            // Валидация
+            let valid = true;
+
+            if (!productName) {
+                document.getElementById('nameError').textContent = 'Название товара обязательно для заполнения.';
+                valid = false;
+            }
+
+            if (productWeight <= 0) {
+                document.getElementById('weightError').textContent = 'Вес товара должен быть положительным.';
+                valid = false;
+            }
+
+            if (deliveryDistance <= 0) {
+                document.getElementById('distanceError').textContent = 'Расстояние доставки должно быть положительным.';
+                valid = false;
+            }
+
+            // Если валидация успешна, добавляем товар в список
+            if (valid) {
+                const deliveryCost = (productWeight * deliveryDistance) * 100;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${productName}</td>
+                    <td>${productWeight.toFixed(1)}</td>
+                    <td>${deliveryDistance.toFixed(1)}</td>
+                    <td>${deliveryCost.toFixed(2)} $</td>
+                `;
+                productList.appendChild(row); // Добавляем строку в таблицу
+
+                // Очищаем форму для ввода новых данных
+                productForm.reset();
+            }
+        });
+    </script>
+</body>
+</html>

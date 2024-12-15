@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <script>
+        // Массив массивов пользователей
+        const users = [
+            ["Alice", 25, true],
+            ["Bob", 30, false],
+            ["Charlie", 22, true],
+            ["David", 27, true],
+            ["Eve", 20, false]
+        ];
+
+        // Функция для фильтрации и сортировки пользователей
+        const filterAndSortUsers = (users) => {
+            return users
+                // Фильтруем пользователей по возрасту и занятию спортом
+                .filter(user => user[1] > 25 && user[2])
+                // Сортируем пользователей по возрастанию возраста
+                .sort((a, b) => a[1] - b[1])
+                // Извлекаем имена пользователей
+                .map(user => user[0]);
+        };
+
+        // Пример работы программы
+        const sportUsersOver25 = filterAndSortUsers(users);
+        console.log(sportUsersOver25); // Выведет ["David"]
+    </script>
+</body>
+</html>

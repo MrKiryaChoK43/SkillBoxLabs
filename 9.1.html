@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск по библиотеке автомобилей</title>
+</head>
+<body>
+    <script>
+        // Объект с автомобилями
+        const cars = {
+            "Toyota Camry": {
+                name: "Toyota Camry",
+                wheels: 4,
+                doors: 4,
+                isStarted: false,
+                hp: 200,
+            },
+            "Honda Accord": {
+                name: "Honda Accord",
+                wheels: 4,
+                doors: 4,
+                isStarted: true,
+                hp: 250,
+            },
+            "Ford Mustang": {
+                name: "Ford Mustang",
+                wheels: 4,
+                doors: 2,
+                isStarted: true,
+                hp: 450,
+            },
+            "Chevrolet Malibu": {
+                name: "Chevrolet Malibu",
+                wheels: 4,
+                doors: 4,
+                isStarted: false,
+                hp: 150,
+            }
+        };
+
+        // Функция для поиска автомобиля по его марке
+        const getCar = (carName) => {
+            if (cars[carName]) {
+                return cars[carName];
+            } else {
+                console.log(`Автомобиль "${carName}" не найден.`);
+                return null; // Или можно просто вернуть undefined
+            }
+        };
+
+        // Примеры работы функции
+        console.log(getCar("Honda Accord")); // Выведет объект Honda Accord
+        console.log(getCar("Tesla Model S")); // Выведет сообщение о том, что автомобиль не найден
+    </script>
+</body>
+</html>

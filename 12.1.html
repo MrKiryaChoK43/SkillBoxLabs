@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Всплывающее окно о подарке</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .popup img {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+        .popup h2 {
+            font-size: 18px;
+            margin: 0;
+            margin-bottom: 10px; /* Добавляем небольшой отступ между заголовком и кнопкой */
+        }
+        .close-btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div id="popup" class="popup">
+    <img id="giftIcon" src="" alt="Иконка подарка">
+    <div>
+        <h2 id="giftTitle">Ваш подарок!</h2>
+        <button class="close-btn">Отлично!</button>
+    </div>
+</div>
+
+<script>
+    const giftArr = [
+        {
+            title: "Скидка 20% на первую покупку в нашем магазине!",
+            icon: "https://cdn-icons-png.flaticon.com/512/214/214305.png"
+        },
+        {
+            title: "Скидка 10% на всё!",
+            icon: "https://cdn-icons-png.flaticon.com/512/214/214305.png"
+        },
+        {
+            title: "Подарок при первой покупке в нашем магазине!",
+            icon: "https://cdn-icons-png.flaticon.com/512/214/214305.png"
+        },
+        {
+            title: "Бесплатная доставка для вас!",
+            icon: "https://cdn-icons-png.flaticon.com/512/214/214305.png"
+        },
+        {
+            title: "Сегодня день больших скидок!",
+            icon: "https://cdn-icons-png.flaticon.com/512/214/214305.png"
+        }
+    ];
+
+    // Функция для выбора случайного подарка
+    function getRandomGift() {
+        const randomIndex = Math.floor(Math.random() * giftArr.length);
+        return giftArr[randomIndex];
+    }
+
+    // Показываем попап через 3 секунды
+    setTimeout(() => {
+        const selectedGift = getRandomGift();
+        document.getElementById('giftIcon').src = selectedGift.icon;
+        document.getElementById('giftTitle').innerText = selectedGift.title;
+
+        // Показываем попап
+        const popup = document.getElementById('popup');
+        popup.style.display = 'flex';
+
+        // Обработчик события для кнопки закрытия
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+    }, 3000);
+</script>
+
+</body>
+</html>

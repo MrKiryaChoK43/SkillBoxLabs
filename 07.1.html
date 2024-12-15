@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашняя библиотека</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        li {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+        }
+        
+        button {
+            margin-right: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .search-book {
+            background-color: orange
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .search-book:hover {
+            background-color: rgb(255, 188, 64)
+        }
+    </style>
+</head>
+<body>
+    <h1>Домашняя библиотека</h1>
+    
+    <button class="add-book">Добавить книгу</button>
+    <button class="search-book">Поиск книги</button>
+
+    <ul class="book-list"></ul>
+    
+    <script>// Исходный массив с книгами
+        const books = ["1984", "Собачье сердце", "Гарри Поттер", "Война и мир"];
+        
+        // Получаем элементы из DOM
+        const bookList = document.querySelector('.book-list');
+        const addBookButton = document.querySelector('.add-book');
+        const searchBookButton = document.querySelector('.search-book');
+        
+        // Функция для отображения книг в списке
+        function displayBooks() {
+            bookList.innerHTML = ''; // Очищаем список
+            books.forEach((book, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = book;
+                listItem.dataset.index = index; // Сохраняем индекс книги
+                bookList.appendChild(listItem);
+            });
+        }
+        
+        // Функция для добавления книги
+        function addBook() {
+            const bookName = prompt("Введите название книги:");
+            
+            if (bookName) {
+                books.push(bookName); // Добавляем книгу в массив
+                displayBooks(); // Обновляем отображение
+            } else {
+                alert("Название книги не введено!");
+            }
+        }
+        
+        // Функция для поиска книги
+        function searchBook() {
+            const searchName = prompt("Введите название книги для поиска:");
+            
+            if (searchName) {
+                const found = books.includes(searchName);
+                const listItems = document.querySelectorAll('.book-list li');
+                
+                if (found) {
+                    listItems.forEach(item => {
+                        if (item.textContent === searchName) {
+                            item.style.backgroundColor = 'yellow'; // Выделяем найденную книгу
+                        } else {
+                            item.style.backgroundColor = ''; // Убираем выделение с других книг
+                        }
+                    });
+                } else {
+                    alert("Книга не найдена!");
+                }
+            } else {
+                alert("Название книги не введено!");
+            }
+        }
+        
+        // Подключаем обработчики событий
+        addBookButton.addEventListener('click', addBook);
+        searchBookButton.addEventListener('click', searchBook);
+        
+        // Изначально отображаем книги
+        displayBooks();</script>
+</body>
+</html>

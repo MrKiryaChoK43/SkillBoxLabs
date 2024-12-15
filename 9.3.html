@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание автомобиля</title>
+</head>
+<body>
+    <script>
+        // Функция для создания автомобиля с объединением объектов
+        const createCar = (additionalProperties) => {
+            // Базовый объект автомобиля
+            const baseCar = {
+                wheels: 4,
+                doors: 4,
+                isStarted: false,
+            };
+            
+            // Объединение базового объекта и дополнительных полей
+            return { ...baseCar, ...additionalProperties };
+        };
+
+        // Пример использования функции
+        const newCar = createCar({ name: 'Haval', hp: 198 });
+        console.log(newCar);
+    </script>
+</body>
+</html>
