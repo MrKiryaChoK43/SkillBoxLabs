@@ -1,0 +1,303 @@
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 30px;
+        color: #333;
+      }
+
+      form {
+        background-color: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px #999;
+      }
+
+      form label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      form input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+
+      form input[type="checkbox"] {
+        margin-bottom: 20px;
+      }
+
+      form input[type="submit"],
+      .delete-all {
+        background-color: #ff0000;
+        color: #fff;
+        padding: 10px 20px;
+        border: 0;
+        border-radius: 5px;
+      }
+
+      form input[type="submit"]:hover,
+      .delete-all:hover {
+        background-color: #444;
+        cursor: pointer;
+      }
+
+      table {
+        width: 100%;
+        background-color: #fff;
+        text-align: left;
+        border-collapse: collapse;
+        box-shadow: 0px 0px 5px #999;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #333;
+        color: #fff;
+      }
+
+      td {
+        vertical-align: top;
+      }
+
+      .error {
+        color: red;
+        margin-bottom: 20px;
+      }
+
+      .filter-container {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #e6e6e6;
+        max-width: max-content;
+        display: flex;
+      }
+
+      .filter-container input {
+        margin-right: 10px;
+      }
+
+      li{
+        list-style-type: none;
+      }
+
+      .filter-element {
+        padding: 5px;
+      }
+
+      .film-button {
+        background-color: #ff0000;
+        color: #fff;
+        padding: 10px 20px;
+        border: 0;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="film-form">
+      <div class="error" id="error-message"></div>
+      <label for="title">Название:</label><br />
+      <input type="text" id="title" name="title" /><br />
+      <label for="genre">Жанр:</label><br />
+      <input type="text" id="genre" name="genre" /><br />
+      <label for="releaseYear">Год:</label><br />
+      <input type="text" id="releaseYear" name="releaseYear" /><br />
+      <input type="checkbox" id="isWatched" name="isWatched" />
+      <label for="isWatched">Успели посмотреть?</label><br />
+
+      <button type="submit">Добавить фильм</button>
+    </form>
+
+    <ul class="filter-container">
+
+      <li class="filter-element"><label for="titleFilter"></label>
+      <input type="text" id="titleFilter" placeholder="Название фильма" onkeyup="filterFilms()" /></li>
+      
+      <li class="filter-element"><label for="genreFilter"></label>
+      <input type="text" id="genreFilter" placeholder="Жанр" onkeyup="filterFilms()" /></li>
+      
+      <li class="filter-element"><label for="yearFilter"></label>
+      <input type="text" id="yearFilter" placeholder="Год релиза" onkeyup="filterFilms()" /></li>
+      
+      <button class="delete-all" onclick="deleteAllFilms()">Удалить все</button>
+      </ul>
+
+    <div>
+      <label for="sort">Сортировать по:</label>
+      <select id="sort">
+        <option value="title">Название</option>
+        <option value="genre">Жанр</option>
+        <option value="releaseYear">Год</option>
+      </select>
+      <button onclick="sortFilms()">Сортировать</button>
+    </div>
+
+    <table id="film-table">
+      <thead>
+        <tr>
+          <th>Название</th>
+          <th>Жанр</th>
+          <th>Год</th>
+          <th>Успели посмотреть?</th>
+          <th>Действие</th>
+        </tr>
+      </thead>
+      <tbody id="film-tbody">
+        <!-- Rows will be inserted here -->
+      </tbody>
+    </table>
+
+    <script>
+      let editIndex = -1;
+
+      function handleFormSubmit(e) {
+        e.preventDefault();
+        const title = document.querySelector('#title').value;
+        const genre = document.querySelector('#genre').value;
+        const releaseYear = document.querySelector('#releaseYear').value;
+        const isWatched = document.querySelector('#isWatched').checked;
+
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.innerText = '';
+
+        if (!title || !genre || !releaseYear) {
+          errorMessage.innerText = 'Пожалуйста, заполните все поля!';
+          return;
+        }
+
+        const film = {
+          title,
+          genre,
+          releaseYear,
+          isWatched,
+        };
+
+        if (editIndex === -1) {
+          addFilmToLocalStorage(film);
+        } else {
+          updateFilmInLocalStorage(film);
+        }
+        resetForm();
+      }
+
+      function addFilmToLocalStorage(film) {
+        const films = JSON.parse(localStorage.getItem('films')) || [];
+        films.push(film);
+        localStorage.setItem('films', JSON.stringify(films));
+        renderTable();
+      }
+
+      function updateFilmInLocalStorage(film) {
+        const films = JSON.parse(localStorage.getItem('films'));
+        films[editIndex] = film;
+        localStorage.setItem('films', JSON.stringify(films));
+        renderTable();
+      }
+
+      function deleteFilm(index) {
+        const films = JSON.parse(localStorage.getItem('films'));
+        films.splice(index, 1);
+        localStorage.setItem('films', JSON.stringify(films));
+        renderTable();
+      }
+      
+      function deleteAllFilms() {
+        localStorage.removeItem('films');
+        renderTable();
+      }
+
+      function editFilm(index) {
+        const films = JSON.parse(localStorage.getItem('films'));
+        const film = films[index];
+
+        document.querySelector('#title').value = film.title;
+        document.querySelector('#genre').value = film.genre;
+        document.querySelector('#releaseYear').value = film.releaseYear;
+        document.querySelector('#isWatched').checked = film.isWatched;
+
+        editIndex = index;
+      }
+
+      function renderTable() {
+        const films = JSON.parse(localStorage.getItem('films')) || [];
+        const filmTableBody = document.querySelector('#film-tbody');
+        filmTableBody.innerHTML = '';
+
+        films.forEach((film, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${film.title}</td>
+            <td>${film.genre}</td>
+            <td>${film.releaseYear}</td>
+            <td>${film.isWatched ? "Да" : "Нет"}</td>
+            <td>
+              <button class="film-button" onclick="editFilm(${index})">Редактировать</button>
+              <button class="film-button" onclick="deleteFilm(${index})">Удалить</button>
+            </td>
+          `;
+          filmTableBody.appendChild(row);
+        });
+      }
+
+      function resetForm() {
+        document.querySelector('#film-form').reset();
+        editIndex = -1;
+      }
+
+      function sortFilms() {
+        const films = JSON.parse(localStorage.getItem('films')) || [];
+        const sortBy = document.querySelector('#sort').value;
+
+        films.sort((a, b) => (a[sortBy] > b[sortBy] ? 1 : -1));
+        localStorage.setItem('films', JSON.stringify(films));
+        renderTable();
+      }
+
+      function filterFilms() {
+        const titleQuery = document.getElementById('titleFilter').value.toLowerCase();
+        const genreQuery = document.getElementById('genreFilter').value.toLowerCase();
+        const yearQuery = document.getElementById('yearFilter').value.toLowerCase();
+        const films = JSON.parse(localStorage.getItem('films')) || [];
+        const filmTableBody = document.querySelector('#film-tbody');
+        filmTableBody.innerHTML = '';
+
+        films.forEach((film, index) => {
+          const titleMatch = film.title.toLowerCase().includes(titleQuery);
+          const genreMatch = film.genre.toLowerCase().includes(genreQuery);
+          const yearMatch = film.releaseYear.toString().includes(yearQuery);
+
+          if (titleMatch && genreMatch && yearMatch) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${film.title}</td>
+              <td>${film.genre}</td>
+              <td>${film.releaseYear}</td>
+              <td>${film.isWatched ? "Да" : "Нет"}</td>
+              <td>
+                <button onclick="editFilm(${index})">Редактировать</button>
+                <button onclick="deleteFilm(${index})">Удалить</button>
+              </td>
+            `;
+            filmTableBody.appendChild(row);
+          }
+        });
+      }
+
+      document.querySelector('#film-form').addEventListener("submit", handleFormSubmit);
+      renderTable();
+    </script>
+  </body>
+</html>
